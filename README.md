@@ -17,6 +17,7 @@ All dependencies are listed in `requirements.txt`.
 1. Double check that your local environment is up-to-date, i.e. that you are building on top of the latest common environment as defined in `requirements.txt` in github. 
 <small>(Merge conflicts caused by dependencies can be a bit hard to solve manually.)</small>
 1. Double check that you have activated the right virtual environment locally. This is to make sure that you are updating the dependencies from the desired local environment.   
-1. Run `pip freeze > requirements.txt`
+1. Add the new dependencies using `pip` package manager.
+1. Run `pip freeze > requirements.txt` in order to update `requirements.txt`.
 1. Commit and push the changes to github.
   
