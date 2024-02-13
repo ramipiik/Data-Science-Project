@@ -117,122 +117,153 @@ def getEvents(tablevariables=[]):
         metadata=_getMeta(url,queryparams,format)
     return metadata
 
+"""our project specific code"""
+
+def divide_timespan(start_timestamp, end_timestamp):
+    
+    current_date = pd.Timestamp('2024-02-13')
+    
+    if end_timestamp > current_date:
+        end_timestamp = current_date
+
+    intervals = []
+
+    current_year = start_timestamp.year
+    end_year = end_timestamp.year
+
+    while current_year <= end_year:
+        start_interval = pd.Timestamp(f'{current_year}-01-01T00:00:00')
+        end_interval = pd.Timestamp(f'{current_year}-12-31T23:59:59')
+
+        if current_year == start_timestamp.year:
+            start_interval = max(start_interval, start_timestamp)
+
+        if current_year == end_timestamp.year:
+            end_interval = min(end_interval, end_timestamp)
+
+        intervals.append((start_interval, end_interval))
+        current_year += 1
+
+    return intervals
     
 if __name__ == '__main__':
-    
-    tablevariables = [
-        'HYY_META.VOC_M137_gradient_flux', #monoterpene
-        'HYY_META.VOC_M33_gradient_flux', #methanol
-        'HYY_META.VOC_M59_gradient_flux', #acetone
-        'HYY_META.VOC_M45_gradient_flux' #acetaldehyde
-        ]
-
-    for i in range(10, 23):
-        fdate = pd.Timestamp(f'20{i}-01-01 00:00:00')
-        ldate = pd.Timestamp(f'20{i}-12-31 23:59:00')
-        print(fdate, ldate)
-
-        data = getData(fdate, ldate, tablevariables, quality='CHECKED')
-        data = data.dropna(subset=tablevariables, how='all')
-
-        data = data.rename(columns={
-            'HYY_META.VOC_M137_gradient_flux': 'monoterpene_flux',
-            'HYY_META.VOC_M33_gradient_flux': 'methanol_flux',
-            'HYY_META.VOC_M59_gradient_flux': 'acetone_flux',
-            'HYY_META.VOC_M45_gradient_flux': 'acetaldehyde_flux'
-            })
-
-        data.to_csv(f'~/project/VOC/voc_20{i}.csv')
 
     tablevariables = [
-        'HYY_EDDY233.NEE', #net ecosystem exchange gapfilled
-        'HYY_EDDY233.Qc_gapf_NEE', #NEE gapfilling method
-        'HYY_EDDY233.GPP', #gross primary production
-        ]
-    
-    for i in range(1, 23):
-        fdate = pd.Timestamp(f'20{str(i).zfill(2)}-01-01 00:00:00')
-        ldate = pd.Timestamp(f'20{str(i).zfill(2)}-12-31 23:59:00')
-        print(fdate, ldate)
-
-        data = getData(fdate, ldate, tablevariables, quality='CHECKED')
-        data = data.dropna(subset=tablevariables, how='all')
-
-        data = data.rename(columns={
-            'HYY_EDDY233.NEE': 'NEE',
-            'HYY_EDDY233.Qc_gapf_NEE': 'NEE_gapfilling_method',
-            'HYY_EDDY233.GPP': 'GPP'
-            })
-
-        data.to_csv(f'~/project/flux/GPP_NEE_flux_20{str(i).zfill(2)}.csv')
-
-    tablevariables = [
-        'HYY_EDDY233.H_gapf', #sensible heat flux gapfilled
-        'HYY_EDDY233.Qc_gapf_H', #sensible heat flux gapfilling method
+        'HYY_EDDY233.ET_gapf',  #Evapotranspiration gapfilled
+        'HYY_EDDY233.GPP',  #Gross primary production
+        'HYY_EDDY233.H_gapf',   #Sensible heat flux gapfilled
+        'HYY_EDDY233.NEE',  #NEE gapfilled
+        'HYY_EDDY233.Qc_gapf_NEE',  #NEE gapfilling method
+        'HYY_META.CO2672',  #CO₂ concentration 67.2 m
+        'HYY_META.CO2icos672',  #CO₂ 67.2 m (ICOS AS)
+        'HYY_META.diffGLOB',    #Diffuse radiation
+        'HYY_META.diffPAR', #Diffuse PAR
+        'HYY_META.Glob',    #Global radiation 18/35 m
+        'HYY_META.Glob67',  #Global radiation 67 m
+        'HYY_META.H2O270icos',  #H₂O 27 m (ICOS ES)
+        'HYY_META.H2O672',  #H₂O concentration 67.2 m
+        'HYY_META.H2Oicos672',  #H₂O 67.2 m (ICOS AS)
+        'HYY_META.maaPAR',  #PAR below canopy
+        'HYY_META.O3672',   #O₃ concentration 67.2 m
+        'HYY_META.O384',    #O₃ concentration 8.4 m
+        'HYY_META.O3tower', #O₃ concentration 35 m
+        'HYY_META.Pamb0',   #Air pressure (ground)
+        'HYY_META.PAR', #PAR
+        'HYY_META.PAR_plot1',   #PAR below canopy (plot1)
+        'HYY_META.PAR_plot2',   #PAR below canopy (plot2)
+        'HYY_META.PAR_plot3',   #PAR below canopy (plot3)
+        'HYY_META.PAR_plot4',   #PAR below canopy (plot4)
+        'HYY_META.Precip',  #Rainfall
+        'HYY_META.Precipacc',   #Precipitation
+        'HYY_META.Precipacc_gpm',   #Precipitation (GPM field)
+        'HYY_META.SD_gpm',  #Snow depth (GPM field)
+        'HYY_META.T336',    #Air temperature 33.6 m
+        'HYY_META.T672',    #Air temperature 67.2 m
+        'HYY_META.Tmm672',  #Air temperature 67.2 m (2)
+        'HYY_META.tsoil_A', #Soil temperature A
+        'HYY_META.VOC_M137_220',    #monoterpenes 22 m
+        'HYY_META.VOC_M137_336',    #monoterpenes 33.6 m
+        'HYY_META.VOC_M137_gradient_flux',  #monoterpene flux
+        'HYY_META.VOC_M33_220',  #methanol 22 m,
+        'HYY_META.VOC_M33_336',  #methanol 33.6 m,
+        'HYY_META.VOC_M33_gradient_flux', #methanol flux
+        'HYY_META.wpsoil_A',    #Soil water potential A
+        'HYY_META.wpsoil_B',    #Soil water potential B
+        'HYY_META.wsoil_A',     #Soil water content A
+        'HYY_META.wsoil_B1_p50' #Soil water content B1 (2)
     ]
 
-    for i in range(1, 23):
-        fdate = pd.Timestamp(f'20{str(i).zfill(2)}-01-01 00:00:00')
-        ldate = pd.Timestamp(f'20{str(i).zfill(2)}-12-31 23:59:00')
-        print(fdate, ldate)
-
-        data = getData(fdate, ldate, tablevariables, quality='CHECKED')
-        data = data.dropna(subset=tablevariables, how='all')
-
-        data = data.rename(columns={
-            'HYY_EDDY233.H_gapf': 'sensible_heat_flux',
-            'HYY_EDDY233.Qc_gapf_H': 'sensible_heat_flux_gapfilling_method'
-            })
-
-        data.to_csv(f'~/project/flux/sensible_heat_flux_20{str(i).zfill(2)}.csv')
-
-    tablevariables = [
-        'HYY_EDDY233.LE', #latent heat flux (before 4/2018)
-        'HYY_EDDY233.Qc_LE' #latent heat flux quality flag (before 4/2018)
+    timestamps = [
+        (pd.Timestamp('1997-01-01T00:15:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:15:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:15:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:15:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:15:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:18:00'), pd.Timestamp('2017-12-12T15:14:00')),
+        (pd.Timestamp('2011-11-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2000-03-15T11:00:00'), pd.Timestamp('2010-03-15T00:00:00')),
+        (pd.Timestamp('2009-12-15T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2017-10-05T12:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2018-04-20T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:18:00'), pd.Timestamp('2017-12-12T15:14:00')),
+        (pd.Timestamp('2011-11-01T00:00:00'), pd.Timestamp('2021-06-09T15:00:00')),
+        (pd.Timestamp('2003-11-20T15:07:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:18:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:03:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2018-06-20T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2019-05-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2019-05-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2019-05-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2019-05-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2005-04-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2014-01-15T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2014-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2012-09-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-01T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2006-06-12T00:00:00'), pd.Timestamp('2009-06-26T00:00:00')),
+        (pd.Timestamp('2010-05-28T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2010-05-28T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2006-06-12T00:00:00'), pd.Timestamp('2009-06-26T00:00:00')),
+        (pd.Timestamp('2010-05-28T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2010-05-28T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2005-06-17T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2005-06-17T00:00:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('1997-01-02T03:32:00'), pd.Timestamp('9999-09-09T00:00:00')),
+        (pd.Timestamp('2007-02-01T00:00:00'), pd.Timestamp('2023-04-04T00:00:00'))
     ]
 
-    for i in range(1, 19):
-        fdate = pd.Timestamp(f'20{str(i).zfill(2)}-01-01 00:00:00')
-        if i == 18:
-            ldate = pd.Timestamp('2018-03-31 23:59:00')
-        else:
-            ldate = pd.Timestamp(f'20{str(i).zfill(2)}-12-31 23:59:00')
+    for var, ts in zip(tablevariables, timestamps):
+        fdate = ts[0]
+        ldate = ts[1]
+        
+        cols = ['Datetime', var]
+
+        df = pd.DataFrame(columns=cols)
+
         print(fdate, ldate)
 
-        data = getData(fdate, ldate, tablevariables, quality='CHECKED')
-        data = data.dropna(subset=tablevariables, how='all')
+        intervals = divide_timespan(fdate, ldate)
 
-        data = data.rename(columns={
-            'HYY_EDDYMAST.LE_270': 'latent_heat_flux_before_4-2018',
-            'HYY_EDDYMAST.Qc_LE_270': 'latent_heat_flux_quality_flag_before_4-2018'
-            })
+        for interval in intervals:
+            data = getData(interval[0], interval[1], [var], quality='CHECKED')
 
-        data.to_csv(f'~/project/flux/latent_heat_flux_before_4-2018_20{str(i).zfill(2)}.csv')
+            if data.empty:
+                continue
 
-    tablevariables = [
-        'HYY_EDDYMAST.LE_270', #latent heat flux (after 4/2018)
-        'HYY_EDDYMAST.Qc_LE_270', #latent heat flux quality flag (after 4/2018)
-    ]
+            data = data.dropna(subset=[var], how='all')
 
-    for i in range(18, 23):
-        if i == 18:
-            fdate = pd.Timestamp('2018-04-01 00:00:00')
-        else:
-            fdate = pd.Timestamp(f'20{str(i).zfill(2)}-01-01 00:00:00')
-        ldate = pd.Timestamp(f'20{str(i).zfill(2)}-12-31 23:59:00')
-        print(fdate, ldate)
+            data = data.rename(columns={var: var})
 
-        data = getData(fdate, ldate, tablevariables, quality='CHECKED')
-        data = data.dropna(subset=tablevariables, how='all')
+            df = pd.concat([df, data], ignore_index=True)
 
-        data = data.rename(columns={
-            'HYY_EDDYMAST.LE_270': 'latent_heat_flux_after_4-2018',
-            'HYY_EDDYMAST.Qc_LE_270': 'latent_heat_flux_quality_flag_after_4-2018'
-            })
+        df.to_csv(f'./data/{var}_{str(ts[0]).split(" ")[0]}--{str(ts[1]).split(" ")[0]}.csv')
 
-        data.to_csv(f'~/project/flux/latent_heat_flux_after_4-2018_20{str(i).zfill(2)}.csv')
-    
-    
 
     #stress periods:
     #2006 july to end of august: drought
