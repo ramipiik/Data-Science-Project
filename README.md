@@ -1,5 +1,13 @@
 # Data-Science-Project
 
+TO DO: Purpose of this repository is to analyze...
+
+## Short instructions
+- TO DO:
+
+## Data
+- TO DO: Add instructions for downloading the data that is not in the repository
+
 ## Environment management  
 All dependencies are listed in `requirements.txt`.
 
