@@ -1,4 +1,7 @@
 .env
 __pycache__
 venv
-data/HYY*.csv
+data/HYY_META.PAR_1997-01-01--9999-09-09.csv
+data/HYY_META.Precipacc_2005-04-01--9999-09-09.csv
+data/HYY_META.T168_1997-01-01--9999-09-09.csv
+data/HYY_META.T672_1997-01-01--9999-09-09.csv
