@@ -1,4 +1,4 @@
-# Purpose
+# Background
 SMEAR II is the world's largest biosphere-atmosphere field station. It is well known that forests are repeatedly experiencing stress, but the frequency and severity of stress, and its impact on air chemistry and physics processes has never been quantified at SMEAR II.
 
 Purpose of the project is to use data analysis and ML to answer: (1) How frequent does the vegetation at SMEAR II experience stress, how long does the stress prevail and how severe is the level of stress. And (2) which impact does the observed stress (duration, type and severity) have on ecosystem scale VOC fluxes in SMEAR II.
