@@ -6,7 +6,7 @@ Purpose of the project is to use data analysis and ML to answer: (1) How frequen
 # Instructions
 ## Quick start
 1. Clone the repository.
-1. Download the data files listed below from https://smear.avaa.csc.fi/download and store them to your local 'data' folder. (The other source data files are included in the repository. These ones were excluded due to their large size):<small>
+1. Download the data files listed below from https://smear.avaa.csc.fi/download and store them to your local `data` folder. (The other source data files are included in the repository. These ones were excluded due to their large size):<small>
    - HYY_META.PAR_1997-01-01--9999-09-09.csv
    - HYY_META.Precipacc_2005-04-01--9999-09-09.csv
    - HYY_META.T168_1997-01-01--9999-09-09.csv
@@ -29,7 +29,6 @@ All dependencies are listed in the file `requirements.txt`.
 
 **Add your local changes to requirements.txt**
 1. Double check that your local environment is up-to-date, i.e. that you are building on top of the latest common environment as defined in `requirements.txt` in github. 
-<small>(Merge conflicts caused by dependencies can be a bit hard to solve manually.)</small>
 1. Double check that you have activated the right virtual environment locally. This is to make sure that you are updating the dependencies from the desired local environment.   
 1. Add the new dependencies using `pip` package manager.
 1. Run `pip freeze > requirements.txt` in order to update `requirements.txt`.
